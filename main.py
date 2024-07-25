@@ -8,9 +8,7 @@ from dotenv import load_dotenv
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense
 from sklearn.preprocessing import MinMaxScaler
-from datetime import datetime, timedelta
 
-# Load environment variables
 load_dotenv()
 API_KEY = os.getenv("OPENWEATHER_API_KEY")
 
@@ -67,7 +65,7 @@ def make_predictions(model, X_test, scaler):
     predictions = scaler.inverse_transform(predictions)
     return predictions
 
-# Streamlit app
+
 st.title("Weather Forecasting with LSTM")
 CITY = st.text_input("Enter the name of the city :")
 BASE_URL = f"http://api.openweathermap.org/data/2.5/forecast?q={CITY}&appid={API_KEY}&units=metric"
@@ -81,10 +79,9 @@ if CITY != "":
 
         scaled_data, scaler = preprocess_data(df)
 
-        seq_length = 24  # Assuming hourly data, this represents 1 day
+        seq_length = 24 
         X, y = create_sequences(scaled_data, seq_length)
 
-        # Split data into train and test sets
         split = int(0.8 * len(X))
         X_train, X_test = X[:split], X[split:]
         y_train, y_test = y[:split], y[split:]
@@ -95,14 +92,12 @@ if CITY != "":
         with open("trained_LSTM_model.pkl", "wb") as model_file:
             plk.dump(model, model_file)
 
-        # Make predictions
         predictions = make_predictions(model, X_test, scaler)
 
         st.subheader("Predicted Weather Data")
         predictions_df = pd.DataFrame(predictions, columns=['Temperature', 'Humidity', 'Wind Speed'])
         st.write(predictions_df)
 
-        # Predict the next 24 hours
         last_sequence = scaled_data[-seq_length:]
         next_24_hours = []
 
