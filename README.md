@@ -31,6 +31,9 @@ This project aims to develop a weather forecasting system using Long Short-Term 
 
 ## Installation
 
+**Get API key in:**
+https://home.openweathermap.org/
+
 1. **Clone the repository:**
 
     ```bash
